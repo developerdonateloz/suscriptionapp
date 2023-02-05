@@ -1,0 +1,119 @@
+﻿@model SuscripcionApp.ViewModels.CreateSuscripcionModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+
+}
+<h1>Suscripción</h1>
+
+<h2>Buscar Suscriptor</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Tipo Documento</label>
+                <select id="selTipoDocumento" class="form-select">
+                    @foreach (var x in Model.TiposDocumentos)
+                    {
+                        <option value=@x.Id>@x.Tipo</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Número Documento</label>
+                <input type="text" class="form-control" id="txtNumeroDocumento" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="btnBuscarSuscriptor" class="btn btn-success">Buscar</button>
+                @*@Html.ActionLink("Buscar","GetByTipoNumeroDocumento","Suscriptor",null,new{@class="btn btn-success",id="btnBuscarSuscriptor"})*@
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<h2>Datos del Suscriptor</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="txtNombre" />
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="txtApellido" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary">Nuevo</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="txtDireccion" />
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="txtEmail" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-info">Modificar</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Teléfono</label>
+                <input type="tel" class="form-control" id="txtTelefono" />
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Estado</label>
+                <input type="text" disabled="disabled" class="form-control" id="txtEstado" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Nombre Usuario</label>
+                <input type="text" class="form-control" id="txtUsuario" />
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" id="txtPassword" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-warning">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#btnBuscarSuscriptor").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Suscriptor/GetByTipoNumeroDocumento",
+                data: JSON.stringify({TipoDocumento:$("#selTipoDocumento").val(),NumeroDocumento:$("#txtNumeroDocumento").val()}),
+                contentType: "application/json",
+                success: function (response) {
+                    console.log(response);
+                    $("#txtNombre").val(response.nombre);
+                    $("#txtEmail").val(response.email);
+                },
+                failure: function (response) {
+                    alert("failure");
+                },
+                error: function (response) {
+                    alert("error");
+                }
+            });
+        });
+    });
+</script>
